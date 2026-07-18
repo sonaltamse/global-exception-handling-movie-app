@@ -1,5 +1,6 @@
 package com.project.app.service;
 
+import com.project.app.exception.MovieAlreadyExistsException;
 import com.project.app.exception.MovieNotFoundException;
 import com.project.app.model.Movie;
 import com.project.app.repository.MovieRepository;
@@ -17,6 +18,9 @@ public class MovieService {
     }
 
     public Movie addMovie(Movie movie) {
+        if (movieRepository.existsByTitleIgnoreCase(movie.getId())) {
+            throw new MovieAlreadyExistsException(movie.getTitle());
+        }
         return movieRepository.save(movie);
     }
 
