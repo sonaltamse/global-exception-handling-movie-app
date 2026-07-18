@@ -1,5 +1,6 @@
 package com.project.app.exception;
 
+import com.sun.jdi.request.DuplicateRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -22,5 +23,12 @@ public class GlobalExceptionHandler {
                         error.getDefaultMessage()).findFirst().orElse("Validation Failed");
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessage);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+
+    @ExceptionHandler(DuplicateRatingException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateRatingException(DuplicateRatingException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 }
